@@ -4,8 +4,8 @@ from pathlib import Path
 from functools import reduce, partial
 from operator import getitem
 from datetime import datetime
-from logger import setup_logging
-from utils import read_json, write_json
+from moGAN_git.logger import setup_logging
+from moGAN_git.utils import read_json, write_json
 
 
 class ConfigParser:
@@ -105,7 +105,8 @@ class ConfigParser:
         module_args = dict(self[name]['args'])
         assert all([k not in module_args for k in kwargs]), 'Overwriting kwargs given in config file is not allowed'
         module_args.update(kwargs)
-        return partial(getattr(module, module_name), *args, **module_args)
+        attr = getattr(module, module_name)
+        return partial(attr, *args, **module_args)
 
     def __getitem__(self, name):
         """Access items like ordinary dict."""

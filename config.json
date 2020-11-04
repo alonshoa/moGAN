@@ -1,22 +1,46 @@
 {
-    "name": "Mnist_LeNet",
-    "n_gpu": 1,
+    "name": "moGAN",
+    "n_gpu": 0,
 
+    "Generator": {
+        "type": "moGanGenerator",
+        "args": {
+            "z_dim"      : 10,
+            "im_dim"     : 330,
+            "hidden_dim" : 30
+        }
+    },
+    "Discriminator": {
+        "type": "moGanDiscriminator",
+        "args": {
+            "im_dim"     :330,
+            "hidden_dim" :30
+        }
+    },
     "arch": {
         "type": "MnistModel",
         "args": {}
     },
     "data_loader": {
-        "type": "MnistDataLoader",
+        "type": "FB_Dataloader",
         "args":{
-            "data_dir": "data/",
+            "max_files": 10,
+            "data_dir": "D:\\idc\\0_Thises\\FB_DATA\\TalkingWithHands32M\\deep_speaker_5",
             "batch_size": 128,
-            "shuffle": true,
+            "shuffle": false,
             "validation_split": 0.1,
-            "num_workers": 2
+            "num_workers": 1
         }
     },
-    "optimizer": {
+    "gen_optimizer": {
+        "type": "Adam",
+        "args":{
+            "lr": 0.05,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "disc_optimizer": {
         "type": "Adam",
         "args":{
             "lr": 0.001,
@@ -24,7 +48,7 @@
             "amsgrad": true
         }
     },
-    "loss": "nll_loss",
+    "loss": "BCE",
     "metrics": [
         "accuracy", "top_k_acc"
     ],
@@ -36,13 +60,13 @@
         }
     },
     "trainer": {
-        "epochs": 100,
+        "epochs": 1000,
 
         "save_dir": "saved/",
-        "save_period": 1,
+        "save_period": 500,
         "verbosity": 2,
         
-        "monitor": "min val_loss",
+        "monitor": "off",
         "early_stop": 10,
 
         "tensorboard": true

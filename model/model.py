@@ -1,8 +1,68 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from base import BaseModel
+from moGAN_git.base import BaseModel
+from moGAN_git.utils.gan_utils import get_discriminator_block, get_generator_block
 
 
+class moGanGenerator(BaseModel):
+
+    def __init__(self, z_dim=10, im_dim=784, hidden_dim=128):
+        super().__init__()
+        self.gen = nn.Sequential(
+            get_generator_block(z_dim, hidden_dim),
+            get_generator_block(hidden_dim, hidden_dim * 2),
+            get_generator_block(hidden_dim * 2, hidden_dim * 4),
+            get_generator_block(hidden_dim * 4, hidden_dim * 8),
+            nn.Linear(hidden_dim * 8, im_dim),
+            # nn.Sigmoid()
+        )
+
+    def forward(self, noise):
+        return self.gen(noise)
+
+
+    def get_gen(self):
+        return self.gen
+
+class moGanDiscriminator(BaseModel):
+
+    def __init__(self, im_dim=784, hidden_dim=128):
+        super().__init__()
+        self.disc = nn.Sequential(
+            get_discriminator_block(im_dim, hidden_dim * 4),
+            get_discriminator_block(hidden_dim * 4, hidden_dim * 2),
+            get_discriminator_block(hidden_dim * 2, hidden_dim),
+            nn.Linear(hidden_dim, 1),
+            nn.Sigmoid()
+        )
+
+    def forward(self, image):
+        return self.disc(image)
+
+
+    def get_disc(self):
+        return self.disc
+
+# class Discriminator(nn.Module):
+#
+#     def __init__(self, im_dim=784, hidden_dim=128):
+#         super().__init__()
+#         self.disc = nn.Sequential(
+#             get_discriminator_block(im_dim, hidden_dim * 4),
+#             get_discriminator_block(hidden_dim * 4, hidden_dim * 2),
+#             get_discriminator_block(hidden_dim * 2, hidden_dim),
+#             nn.Linear(hidden_dim, 1)
+#         )
+#
+#     def forward(self, image):
+#         return self.disc(image)
+#
+#
+#     def get_disc(self):
+#         return self.disc
+
+
+##Example class from templete
 class MnistModel(BaseModel):
     def __init__(self, num_classes=10):
         super().__init__()

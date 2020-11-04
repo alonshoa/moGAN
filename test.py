@@ -1,11 +1,11 @@
 import argparse
 import torch
 from tqdm import tqdm
-import data_loader.data_loaders as module_data
-import model.loss as module_loss
-import model.metric as module_metric
-import model.model as module_arch
-from parse_config import ConfigParser
+import moGAN_git.data_loader.data_loaders as module_data
+import moGAN_git.model.loss as module_loss
+import moGAN_git.model.metric as module_metric
+import moGAN_git.model.model as module_arch
+from moGAN_git.parse_config import ConfigParser
 
 
 def main(config):
