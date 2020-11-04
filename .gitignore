@@ -101,11 +101,11 @@ ENV/
 .mypy_cache/
 
 # input data, saved log, checkpoints
-data/
+data/Mnist/
 input/
 saved/
 datasets/
-
+wandb/
 # editor, os cache directory
 .vscode/
 .idea/
