@@ -1,6 +1,6 @@
 {
     "name": "moGAN",
-    "n_gpu": 0,
+    "n_gpu": 1,
 
     "Generator": {
         "type": "moGanGenerator",
@@ -26,7 +26,7 @@
         "args":{
             "max_files": 10,
             "data_dir": "D:\\idc\\0_Thises\\FB_DATA\\TalkingWithHands32M\\deep_speaker_5",
-            "batch_size": 128,
+            "batch_size": 256,
             "shuffle": false,
             "validation_split": 0.1,
             "num_workers": 1

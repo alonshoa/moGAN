@@ -3,7 +3,7 @@ from torch.utils.data import Dataset
 import pandas as pd
 
 
-class FB_Dataset_test(Dataset):
+class FbDatasetSingle(Dataset):
     def __init__(self, file_name, use_time=False):
         df = pd.read_csv(file_name)
         self.size = len(df)

@@ -84,13 +84,17 @@ class AdvTrainer:
         """
         # for real, _ in self.data_loader:
         for real, _ in tqdm(self.data_loader):
+            # for real in t:
+            # print(real)
+            # exit()
             cur_batch_size = len(real)
 
             real = real.view(cur_batch_size, -1).to(self.device)
             self.disc_model.train()
             self.disc_optimizer.zero_grad()
 
-            disc_loss = get_disc_loss(self.gen_model, self.disc_model, self.criterion, real, cur_batch_size, self.z_dim, self.device)
+            disc_loss = get_disc_loss(self.gen_model, self.disc_model, self.criterion, real, cur_batch_size, self.z_dim,
+                                      self.device)
 
             # Update gradients
             disc_loss.backward(retain_graph=True)
@@ -103,14 +107,16 @@ class AdvTrainer:
                 old_generator_weights = self.gen_model.gen[0][0].weight.detach().clone()
             self.gen_model.train()
             self.gen_optimizer.zero_grad()
-            gen_loss,fake_images = get_gen_loss(self.gen_model, self.disc_model, self.criterion, cur_batch_size, self.z_dim, self.device)
+            gen_loss, fake_images = get_gen_loss(self.gen_model, self.disc_model, self.criterion, cur_batch_size,
+                                                 self.z_dim, self.device)
             gen_loss.backward(retain_graph=True)
             self.gen_optimizer.step()
 
             # For testing purposes, to check that your code changes the generator weights
             if self.test_generator:
                 try:
-                    assert self.lr > 0.0000002 or (self.gen_model.gen[0][0].weight.grad.abs().max() < 0.0005 and epoch == 0)
+                    assert self.lr > 0.0000002 or (
+                                self.gen_model.gen[0][0].weight.grad.abs().max() < 0.0005 and epoch == 0)
                     assert torch.any(self.gen_model.gen[0][0].weight.detach().clone() != old_generator_weights)
                 except:
                     error = True
